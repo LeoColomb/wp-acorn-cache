@@ -1,0 +1,51 @@
+{
+  "name": "leocolomb/wp-acorn-cache",
+  "description": "A cache manager powered by Laravel through Acorn.",
+  "keywords": [
+    "wordpress-dropin",
+    "wordpress-cache",
+    "cache-object",
+    "cache-page",
+    "cache-advanced",
+    "acorn",
+    "laravel",
+    "wordpress"
+  ],
+  "homepage": "https://github.com/LeoColomb/wp-acorn-cache",
+  "license": "ICS",
+  "authors": [
+    {
+      "name": "Léo Colombaro",
+      "homepage": "https://colombaro.fr/"
+    }
+  ],
+  "require": {
+    "php": ">=7.4",
+    "composer/installers": "^1.0",
+    "koodimonni/composer-dropin-installer": "^1.3"
+  },
+  "require-dev": {
+    "roots/acorn": "^1.0",
+    "squizlabs/php_codesniffer": "^3.5"
+  },
+  "extra": {
+    "acorn": {
+      "providers": [
+        "LeoColomb\\WPAcornCache\\ServiceProvider"
+      ]
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "LeoColomb\\WPAcornCache\\": "src/"
+    }
+  },
+  "minimum-stability": "dev",
+  "scripts": {
+    "lint": "phpcs",
+    "lint:fix": "phpcbf"
+  },
+  "support": {
+    "issues": "https://github.com/LeoColomb/wp-acorn-cache/issues"
+  }
+}
