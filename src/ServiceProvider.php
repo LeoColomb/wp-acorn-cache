@@ -13,8 +13,8 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(Container::class, function () {
-            return new Container($this->config());
+        $this->app->singleton(AcornCache::class, function () {
+            return new AcornCache($this->config());
         });
         $this->app->singleton(PageCache::class, function () {
             return new PageCache($this->config());

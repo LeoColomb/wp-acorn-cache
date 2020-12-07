@@ -54,6 +54,6 @@ class Commands extends WP_CLI_Command
             return;
         }
 
-        app(\LeoColomb\WPAcornCache\Container::class)->flush();
+        app(\LeoColomb\WPAcornCache\AcornCache::class)->flush();
     }
 }

@@ -106,7 +106,7 @@ class PageCache
             $this->keys['path']
         ));
 
-        $this->url_version = (int) app(Container::class)->get("{$this->url_key}_version", $this->group);
+        $this->url_version = (int) app(AcornCache::class)->get("{$this->url_key}_version", $this->group);
     }
 
     protected function addVariant($function)
@@ -123,9 +123,9 @@ class PageCache
     public function doVariants($dimensions = false)
     {
         if ($dimensions === false) {
-            $dimensions = app(Container::class)->get("{$this->url_key}_vary", $this->group);
+            $dimensions = app(AcornCache::class)->get("{$this->url_key}_vary", $this->group);
         } else {
-            app(Container::class)->set("{$this->url_key}_vary", $dimensions, $this->group, $this->max_age + 10);
+            app(AcornCache::class)->set("{$this->url_key}_vary", $dimensions, $this->group, $this->max_age + 10);
         }
 
         if (is_array($dimensions)) {
@@ -198,7 +198,7 @@ class PageCache
         $output = trim($output);
 
         if ($this->cancel !== false) {
-            app(Container::class)->delete("{$this->url_key}_genlock", $this->group);
+            app(AcornCache::class)->delete("{$this->url_key}_genlock", $this->group);
             header('X-Cache-Status: BYPASS', true);
 
             return $output;
@@ -206,7 +206,7 @@ class PageCache
 
         // Do not cache 5xx responses
         if (isset($this->status_code) && intval($this->status_code / 100) === 5) {
-            app(Container::class)->delete("{$this->url_key}_genlock", $this->group);
+            app(AcornCache::class)->delete("{$this->url_key}_genlock", $this->group);
             header('X-Cache-Status: BYPASS', true);
 
             return $output;
@@ -237,7 +237,7 @@ class PageCache
         foreach ($cache['headers'] as $header => $values) {
             // Don't cache if cookies were set
             if (strtolower($header) === 'set-cookie') {
-                app(Container::class)->delete("{$this->url_key}_genlock", $this->group);
+                app(AcornCache::class)->delete("{$this->url_key}_genlock", $this->group);
                 header('X-Cache-Status: BYPASS', true);
 
                 return $output;
@@ -252,9 +252,9 @@ class PageCache
 
         $cache['max_age'] = $this->max_age;
 
-        app(Container::class)->set($this->key, $cache, $this->group, $this->max_age + $this->seconds + 30);
+        app(AcornCache::class)->set($this->key, $cache, $this->group, $this->max_age + $this->seconds + 30);
 
-        app(Container::class)->delete("{$this->url_key}_genlock", $this->group);
+        app(AcornCache::class)->delete("{$this->url_key}_genlock", $this->group);
 
         if ($this->cache_control) {
             // Don't clobber `Last-Modified` header if already set
@@ -339,7 +339,7 @@ class PageCache
             header('Vary: Cookie', false);
         }
 
-        app(Container::class)->addGlobalGroups([$this->group]);
+        app(AcornCache::class)->addGlobalGroups([$this->group]);
 
         $this->setupRequest();
         $this->doVariants();
@@ -348,7 +348,7 @@ class PageCache
         $genlock = false;
         $do_cache = false;
         $serve_cache = false;
-        $cachedValue = app(Container::class)->get($this->key, $this->group);
+        $cachedValue = app(AcornCache::class)->get($this->key, $this->group);
 
         if (isset($cachedValue['version']) && $cachedValue['version'] !== $this->url_version) {
             // Refresh the cache if a newer version is available
@@ -367,15 +367,15 @@ class PageCache
         } else if (! is_array($cachedValue) || time() >= $cachedValue['time'] + $this->max_age - $this->seconds) {
             // No cache item found, or ready to sample traffic again at the end of the cache life
 
-            app(Container::class)->add($this->req_key, 0, $this->group);
-            $requests = app(Container::class)->incr($this->req_key, 1, $this->group);
+            app(AcornCache::class)->add($this->req_key, 0, $this->group);
+            $requests = app(AcornCache::class)->incr($this->req_key, 1, $this->group);
 
             if ($requests >= $this->times) {
                 if (is_array($cachedValue) && time() >= $cachedValue['time'] + $cachedValue['max_age']) {
                     $this->cacheStatusHeader($this::CACHE_STATUS_EXPIRED);
                 }
 
-                app(Container::class)->delete($this->req_key, $this->group);
+                app(AcornCache::class)->delete($this->req_key, $this->group);
                 $do_cache = true;
             } else {
                 $this->cacheStatusHeader($this::CACHE_STATUS_IGNORED);
@@ -385,7 +385,7 @@ class PageCache
 
         // Obtain cache generation lock
         if ($do_cache) {
-            $genlock = app(Container::class)->add("{$this->url_key}_genlock", 1, $this->group, 10);
+            $genlock = app(AcornCache::class)->add("{$this->url_key}_genlock", 1, $this->group, 10);
         }
 
         if (

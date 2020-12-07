@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Cache;
  *
  * @since 2.0.0
  */
-class Container
+class AcornCache
 {
 
     /**
@@ -110,10 +110,6 @@ class Container
      *
      * @since 2.0.0
      *
-     * @uses WP_Object_Cache::_exists() Checks to see if the cache already has data.
-     * @uses WP_Object_Cache::set()     Sets the data after the checking the cache
-     *                                  contents existence.
-     *
      * @param int|string $key    What to call the contents in the cache.
      * @param mixed      $data   The contents to store in the cache.
      * @param string     $group  Optional. Where to group the cache contents. Default 'default'.
@@ -136,8 +132,6 @@ class Container
      * Replaces the contents in the cache, if contents already exist.
      *
      * @since 2.0.0
-     *
-     * @see WP_Object_Cache::set()
      *
      * @param int|string $key    What to call the contents in the cache.
      * @param mixed      $data   The contents to store in the cache.
