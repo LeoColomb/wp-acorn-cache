@@ -12,7 +12,7 @@
     "wordpress"
   ],
   "homepage": "https://github.com/LeoColomb/wp-acorn-cache",
-  "license": "ICS",
+  "license": "ISC",
   "authors": [
     {
       "name": "Léo Colombaro",
