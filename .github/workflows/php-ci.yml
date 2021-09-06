@@ -16,7 +16,7 @@ jobs:
       matrix:
         php_version: 
           - '7.4'
-          - '8.0'
+          # - '8.0'
 
     steps:
       - uses: actions/checkout@v2.3.4
@@ -39,7 +39,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
+        run: composer install --prefer-dist
 
       - name: Lint
         run: composer run lint
