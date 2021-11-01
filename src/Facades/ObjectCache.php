@@ -2,10 +2,10 @@
 
 namespace LeoColomb\WPAcornCache\Facades;
 
-use LeoColomb\WPAcornCache\AcornCache as AcornCacheAccessor;
+use LeoColomb\WPAcornCache\ObjectCache as ObjectCacheAccessor;
 use Roots\Acorn\Facade as Facade;
 
-class AcornCache extends Facade
+class ObjectCache extends Facade
 {
     /**
      * Get the registered name of the component.
@@ -14,6 +14,6 @@ class AcornCache extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return AcornCacheAccessor::class;
+        return ObjectCacheAccessor::class;
     }
 }

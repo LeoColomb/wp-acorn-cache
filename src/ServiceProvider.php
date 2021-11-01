@@ -2,6 +2,7 @@
 
 namespace LeoColomb\WPAcornCache;
 
+use Roots\Acorn\Application;
 use Roots\Acorn\ServiceProvider as BaseServiceProvider;
 
 class ServiceProvider extends BaseServiceProvider
@@ -13,11 +14,12 @@ class ServiceProvider extends BaseServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton(AcornCache::class, function () {
-            return new AcornCache($this->config());
+        $this->app->singleton(ObjectCache::class, function () {
+            return new ObjectCache($this->config());
         });
+        // TODO: Lazy load
         $this->app->singleton(PageCache::class, function () {
-            return new PageCache($this->config());
+            return new PageCache(app('http'), $this->config());
         });
     }
 
@@ -29,7 +31,8 @@ class ServiceProvider extends BaseServiceProvider
     public function boot(): void
     {
         $this->publishes([
-            __DIR__ . '/../config/wp-cache.php' => $this->app->configPath('wp-cache.php')
+            dirname(__DIR__) . '/config/object-cache.php' => $this->app->configPath('object-cache.php'),
+            dirname(__DIR__) . '/config/page-cache.php' => $this->app->configPath('page-cache.php'),
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace LeoColomb\WPAcornCache;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
@@ -18,71 +19,52 @@ use Illuminate\Support\Facades\Cache;
  * exists, then this file will not be included.
  *
  * @since 2.0.0
+ * @see \WP_Object_Cache
  */
-class AcornCache
+class ObjectCache
 {
-
     /**
-     * Holds the cached objects.
+     * Configuration
      *
-     * @since 2.0.0
-     * @var   Collection
+     * @var Collection
      */
-    private Collection $cache;
+    protected Collection $config;
 
     /**
-     * Config
-     *
      * @var array
      */
-    protected $config = [
-        'groups' => [
-            'global' => [
-                'blog-details',
-                'blog-id-cache',
-                'blog-lookup',
-                'global-posts',
-                'networks',
-                'rss',
-                'sites',
-                'site-details',
-                'site-lookup',
-                'site-options',
-                'site-transient',
-                'users',
-                'useremail',
-                'userlogins',
-                'usermeta',
-                'user_meta',
-                'userslugs',
-            ],
-            'ignored' => ['counts', 'plugins']
+    protected array $defaultConfig = [
+        'global' => [
+            'blog-details',
+            'blog-id-cache',
+            'blog-lookup',
+            'global-posts',
+            'networks',
+            'rss',
+            'sites',
+            'site-details',
+            'site-lookup',
+            'site-options',
+            'site-transient',
+            'users',
+            'useremail',
+            'userlogins',
+            'usermeta',
+            'user_meta',
+            'userslugs',
+        ],
+        'non-persistent' => [
+            'counts',
+            'plugins',
+            'themes',
         ]
     ];
 
     /**
-     * The blog prefix to prepend to keys in non-global groups.
-     *
-     * @since 3.5.0
+     * The blog prefix to prepend to the keys in non-global groups.
      * @var   string
      */
-    private string $blog_prefix;
-
-    /**
-     * The blog prefix to prepend to keys in global groups.
-     *
-     * @since 3.5.0
-     * @var   int
-     */
-    private int $global_prefix;
-
-    /**
-     * Holds the value of is_multisite().
-     *
-     * @since 3.5.0
-     * @var   bool
-     */
-    private bool $multisite;
+    private string $blogPrefix = '';
 
     /**
      * Initialize
@@ -92,24 +74,12 @@ class AcornCache
      */
     public function __construct(array $config = [])
     {
-        global $table_prefix;
-
-        $this->config = collect($this->config)->merge($config);
-        $this->cache = collect();
-
-        // Assign global and blog prefixes for use with keys
-        if (function_exists('is_multisite')) {
-            $this->multisite = is_multisite();
-        }
-
-        $this->global_prefix = ($this->multisite || defined('CUSTOM_USER_TABLE') && defined('CUSTOM_USER_META_TABLE')) ? '' : $table_prefix;
-        $this->blog_prefix   = $this->multisite ? get_current_blog_id() : $table_prefix;
+        $this->config = collect($this->defaultConfig)->merge($config);
+        $this->switchToBlog();
     }
 
     /**
      * Adds data to the cache if it doesn't already exist.
-     *
-     * @since 2.0.0
      *
      * @param int|string $key    What to call the contents in the cache.
      * @param mixed      $data   The contents to store in the cache.
@@ -169,7 +139,7 @@ class AcornCache
      *
      * @return true Always returns true.
      */
-    public function flush()
+    public function flush(): bool
     {
         return Cache::flush();
     }
@@ -246,7 +216,7 @@ class AcornCache
      */
     public function set($key, $data, $group = 'default', $expire = null): bool
     {
-        if (in_array($group, $this->config->get('groups.ignored'))) {
+        if (in_array($group, $this->config->get('non-persistent'))) {
             return true;
         }
 
@@ -265,7 +235,7 @@ class AcornCache
      */
     public function incr(string $key, int $offset = 1, string $group = 'default')
     {
-        if (in_array($group, $this->config->get('groups.ignored'))) {
+        if (in_array($group, $this->config->get('non-persistent'))) {
             return false;
         }
 
@@ -286,7 +256,7 @@ class AcornCache
      */
     public function decr(string $key, int $offset = 1, string $group = 'default')
     {
-        if (in_array($group, $this->config->get('groups.ignored'))) {
+        if (in_array($group, $this->config->get('non-persistent'))) {
             return false;
         }
 
@@ -325,19 +295,47 @@ class AcornCache
         return Cache::pull($this->buildKey($key, $group), $default);
     }
 
-    public function switchToBlog(int $blogId): void
+    /**
+     * In multisite, switch blog prefix when switching blogs.
+     *
+     * @param ?int $blogId Blog ID.
+     */
+    public function switchToBlog(?int $blogId = null): void
     {
-        //
+        if (function_exists('is_multisite') && is_multisite()) {
+            $this->blogPrefix = ($blogId ?: get_current_blog_id()) . ':';
+        }
     }
 
+    /**
+     * Sets the list of groups.
+     *
+     * @param string $category The category of the list of groups.
+     * @param array|string $groups List of groups that are global.
+     */
+    protected function addGroups(string $category, $groups): void
+    {
+        $this->config->mergeRecursive([$category => Arr::wrap($groups)]);
+    }
+
+    /**
+     * Sets the list of global groups.
+     *
+     * @param array|string $groups List of groups that are global.
+     */
     public function addGlobalGroups($groups): void
     {
-        //
+        $this->addGroups('global', $groups);
     }
 
+    /**
+     * Sets the list of groups not to be cached.
+     *
+     * @param array|string $groups  List of groups that are to be non-persistent.
+     */
     public function addNonPersistentGroups($groups): void
     {
-        //
+        $this->addGroups('non-persistent', $groups);
     }
 
     /**
@@ -353,8 +351,8 @@ class AcornCache
             $group = 'default';
         }
 
-        $prefix = in_array($group, $this->config->get('groups.global')) ? $this->global_prefix : $this->blog_prefix;
+        $prefix = in_array($group, $this->config->get('global')) ? '' : $this->blogPrefix;
 
-        return "{$prefix}:{$group}:{$key}";
+        return "{$prefix}{$group}:{$key}";
     }
 }
