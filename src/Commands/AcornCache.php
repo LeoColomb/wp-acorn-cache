@@ -1,6 +1,11 @@
 <?php
 
-namespace LeoColomb\WPAcornCache;
+namespace LeoColomb\WPAcornCache\Commands;
+
+use WP_CLI;
+use WP_CLI_Command;
+use function app;
+use const LeoColomb\WPAcornCache\WP_REDIS_DISABLED;
 
 /**
  * WordPress Acorn Cache commands.
@@ -10,7 +15,7 @@ namespace LeoColomb\WPAcornCache;
  *     # Print cache status.
  *     $ wp ac status
  */
-class Commands extends WP_CLI_Command
+class AcornCache extends WP_CLI_Command
 {
     /**
      * Show the Redis cache status and (when possible) client.

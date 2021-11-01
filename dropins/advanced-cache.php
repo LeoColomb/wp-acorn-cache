@@ -10,6 +10,5 @@ if (! class_exists('\\LeoColomb\\WPAcornCache\\PageCache')) {
 
 use LeoColomb\WPAcornCache\PageCache;
 
-use function Roots\app;
-
-app(PageCache::class)->handle();
+\Roots\bootloader();
+app(PageCache::class)->handleRequest();

@@ -2,6 +2,7 @@
 
 namespace LeoColomb\WPAcornCache;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -25,9 +26,9 @@ class AcornCache
      * Holds the cached objects.
      *
      * @since 2.0.0
-     * @var   array
+     * @var   Collection
      */
-    private array $cache = [];
+    private Collection $cache;
 
     /**
      * Config
@@ -118,10 +119,7 @@ class AcornCache
      */
     public function add(string $key, $data, string $group = 'default', int $expire = 0): bool
     {
-        $suspend = function_exists('wp_suspend_cache_addition')
-            ? wp_suspend_cache_addition()
-            : false;
-        if ($suspend) {
+        if (function_exists('wp_suspend_cache_addition') && wp_suspend_cache_addition()) {
             return false;
         }
 

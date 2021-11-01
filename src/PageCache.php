@@ -17,16 +17,16 @@ class PageCache
      *
      * @var array
      */
-    protected $vary = [];
+    protected array $vary = [];
 
     /**
      * Set to `true` to disable the output buffer.
      *
      * @var boolean
      */
-    protected $cancel = false;
+    protected bool $cancel = false;
 
-    protected $keys = [];
+    protected array $keys = [];
     protected $url_key;
     protected $url_version;
     protected $key;
@@ -39,7 +39,7 @@ class PageCache
      *
      * @var array
      */
-    protected $config = [
+    protected array $config = [
         'times' => 2,
         'seconds' => 120,
         'max_age' => 300,
@@ -72,7 +72,7 @@ class PageCache
         return $this->$name;
     }
 
-    public function setupRequest()
+    public function setupRequest(): void
     {
         if (isset($_SERVER['HTTP_HOST'])) {
             $this->keys['host'] = $_SERVER['HTTP_HOST'];
@@ -109,7 +109,7 @@ class PageCache
         $this->url_version = (int) app(AcornCache::class)->get("{$this->url_key}_version", $this->group);
     }
 
-    protected function addVariant($function)
+    protected function addVariant($function): void
     {
         $this->vary[md5($function)] = $function;
     }
@@ -120,7 +120,7 @@ class PageCache
      *
      * @param  array|false  $dimensions
      */
-    public function doVariants($dimensions = false)
+    public function doVariants($dimensions = false): void
     {
         if ($dimensions === false) {
             $dimensions = app(AcornCache::class)->get("{$this->url_key}_vary", $this->group);
@@ -138,7 +138,7 @@ class PageCache
         }
     }
 
-    public function generateKeys()
+    public function generateKeys(): void
     {
         $this->key = md5(serialize($this->keys));
         $this->req_key = "{$this->key}_reqs";
@@ -152,7 +152,7 @@ class PageCache
         return $status_header;
     }
 
-    public function cacheStatusHeader($cache_status)
+    public function cacheStatusHeader($cache_status): void
     {
         header(self::CACHE_STATUS_HEADER_NAME . ": $cache_status");
     }
@@ -163,7 +163,7 @@ class PageCache
      * @param  array  $headers1
      * @param  array  $headers2
      */
-    public function doHeaders($headers1, $headers2 = [])
+    public function doHeaders($headers1, $headers2 = []): void
     {
         $headers = [];
         $keys = array_unique(array_merge(array_keys($headers1), array_keys($headers2)));
@@ -193,7 +193,7 @@ class PageCache
         }
     }
 
-    protected function outputCallback($output)
+    protected function outputCallback($output): string
     {
         $output = trim($output);
 
@@ -272,7 +272,7 @@ class PageCache
         return $cache['output'];
     }
 
-    public function handle()
+    public function handleRequest(): void
     {
         $this->cacheStatusHeader($this::CACHE_STATUS_MISS);
 
@@ -356,13 +356,10 @@ class PageCache
             $do_cache = true;
         } else if ($this->seconds < 1 || $this->times < 2) {
             if (is_array($cachedValue) && time() < $cachedValue['time'] + $cachedValue['max_age']) {
-                $do_cache = false;
                 $serve_cache = true;
             } else if (is_array($cachedValue) && $this->use_stale) {
                 $do_cache = true;
                 $serve_cache = true;
-            } else {
-                $do_cache = true;
             }
         } else if (! is_array($cachedValue) || time() >= $cachedValue['time'] + $this->max_age - $this->seconds) {
             // No cache item found, or ready to sample traffic again at the end of the cache life
@@ -442,11 +439,11 @@ class PageCache
 
             $this->cacheStatusHeader($this::CACHE_STATUS_HIT);
 
+            echo $cachedValue['output'];
+
             if ($do_cache && function_exists('fastcgi_finish_request')) {
-                echo $cachedValue['output'];
                 fastcgi_finish_request();
             } else {
-                echo $cachedValue['output'];
                 exit;
             }
         }

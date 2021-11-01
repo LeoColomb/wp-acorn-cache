@@ -12,7 +12,6 @@ if (! class_exists('\\LeoColomb\\WPAcornCache\\AcornCache')) {
 
 use LeoColomb\WPAcornCache\AcornCache;
 
-use function Roots\app;
 
 /**
  * Adds data to the cache, if the cache key doesn't already exist.
@@ -27,7 +26,7 @@ use function Roots\app;
  *                            Default 0 (no expiration).
  * @return bool True on success, false if cache key and group already exist.
  */
-function wp_cache_add($key, $data, $group = '', $expire = 0)
+function wp_cache_add($key, $data, string $group = '', int $expire = 0)
 {
     return app(AcornCache::class)->add($key, $data, $group, $expire);
 }
@@ -58,7 +57,7 @@ function wp_cache_close()
  * @param  string     $group  Optional. The group the key is in. Default empty.
  * @return int|false  The item's new value on success, false on failure.
  */
-function wp_cache_decr($key, $offset = 1, $group = '')
+function wp_cache_decr($key, int $offset = 1, string $group = '')
 {
     return app(AcornCache::class)->decr($key, $offset, $group);
 }
@@ -147,6 +146,7 @@ function wp_cache_incr($key, $offset = 1, $group = '')
  */
 function wp_cache_init()
 {
+    \Roots\bootloader();
     $GLOBALS['wp_object_cache'] = app(AcornCache::class);
 }
 
@@ -183,7 +183,7 @@ function wp_cache_replace($key, $data, $group = '', $expire = 0)
  *                            Default 0 (no expiration).
  * @return bool True on success, false on failure.
  */
-function wp_cache_set($key, $data, $group = '', $expire = 0)
+function wp_cache_set($key, $data, string $group = '', int $expire = 0)
 {
     return app(AcornCache::class)->set($key, $data, $group, $expire);
 }
@@ -197,7 +197,7 @@ function wp_cache_set($key, $data, $group = '', $expire = 0)
  *
  * @param int $blog_id Site ID.
  */
-function wp_cache_switch_to_blog($blog_id)
+function wp_cache_switch_to_blog(int $blog_id)
 {
     app(AcornCache::class)->switchToBlog($blog_id);
 }
@@ -238,7 +238,7 @@ function wp_cache_add_non_persistent_groups($groups)
  *
  * @return mixed The value returned from $callback, pulled from the cache when available.
  */
-function wp_cache_remember($key, $callback, $group = '', $expire = 0)
+function wp_cache_remember(string $key, callable $callback, string $group = '', int $expire = 0)
 {
     return app(AcornCache::class)->remember($key, $callback, $group, $expire);
 }
@@ -253,7 +253,7 @@ function wp_cache_remember($key, $callback, $group = '', $expire = 0)
  *
  * @return mixed The cached value, when available, or $default.
  */
-function wp_cache_forget($key, $group = '', $default = null)
+function wp_cache_forget(string $key, string $group = '', $default = null)
 {
     return app(AcornCache::class)->forget($key, $group, $default);
 }
