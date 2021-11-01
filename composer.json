@@ -41,6 +41,12 @@
       "LeoColomb\\WPAcornCache\\": "src/"
     }
   },
+  "config": {
+    "platform": {
+      "php": "7.4.6"
+    },
+    "sort-packages": true
+  },
   "minimum-stability": "dev",
   "scripts": {
     "lint": "phpcs",
