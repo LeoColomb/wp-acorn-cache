@@ -15,11 +15,11 @@ class ServiceProvider extends BaseServiceProvider
     public function register(): void
     {
         $this->app->singleton(ObjectCache::class, function () {
-            return new ObjectCache($this->config());
+            return new ObjectCache($this->app->config->get('object-cache'));
         });
         // TODO: Lazy load
         $this->app->singleton(PageCache::class, function () {
-            return new PageCache(app('http'), $this->config());
+            return new PageCache(app('http'), $this->app->config->get('page-cache'));
         });
     }
 
@@ -34,19 +34,5 @@ class ServiceProvider extends BaseServiceProvider
             dirname(__DIR__) . '/config/object-cache.php' => $this->app->configPath('object-cache.php'),
             dirname(__DIR__) . '/config/page-cache.php' => $this->app->configPath('page-cache.php'),
         ]);
-    }
-
-    /**
-     * Return the services config.
-     *
-     * @return array
-     */
-    protected function config(): array
-    {
-        return collect([
-            'path' => $this->app->basePath('dist')
-        ])
-            ->merge($this->app->config->get('wp-cache', []))
-            ->all();
     }
 }
