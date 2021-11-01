@@ -32,7 +32,7 @@
   "extra": {
     "acorn": {
       "providers": [
-        "LeoColomb\\WPAcornCache\\ServiceProvider"
+        "LeoColomb\\WPAcornCache\\Providers\\AcornCacheServiceProvider"
       ]
     }
   },

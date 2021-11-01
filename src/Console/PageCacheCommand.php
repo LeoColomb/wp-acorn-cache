@@ -1,6 +1,6 @@
 <?php
 
-namespace LeoColomb\WPAcornCache\Commands;
+namespace LeoColomb\WPAcornCache\Console;
 
 use LeoColomb\WPAcornCache\ObjectCache;
 use LeoColomb\WPAcornCache\PageCache;

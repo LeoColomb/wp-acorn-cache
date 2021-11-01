@@ -41,6 +41,12 @@ based on [Laravel](https://laravel.com/) fondation.
 
 ## Configuration
 
+Start by publishing the configuration file using Acorn:
+
+```bash
+wp acorn vendor:publish --provider="LeoColomb\WPAcornCache\Providers\AcornCacheServiceProvider"
+```
+
 ### Object Cache
 #### Driver
 
