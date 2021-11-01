@@ -13,16 +13,16 @@ use Symfony\Component\HttpKernel\KernelInterface;
 /**
  * Manages HTTP cache objects in a Container.
  *
- * @author Fabien Potencier <fabien@symfony.com>
+ * @link https://github.com/symfony/symfony/blob/6.0/src/Symfony/Bundle/FrameworkBundle/HttpCache/HttpCache.php
  */
 class PageCache extends HttpCache
 {
-    protected $cacheDir;
-    protected $kernel;
+    protected string $cacheDir;
+    protected KernelInterface $kernel;
 
-    private $store;
-    private $surrogate;
-    private $options;
+    private StoreInterface $store;
+    private SurrogateInterface $surrogate;
+    private array $options;
 
     /**
      * @param array|string|StoreInterface $cache The cache directory (default used if null) or the storage instance
@@ -57,7 +57,7 @@ class PageCache extends HttpCache
     /**
      * {@inheritdoc}
      */
-    protected function forward(Request $request, bool $catch = false, Response $entry = null)
+    protected function forward(Request $request, bool $catch = false, Response $entry = null): Response
     {
         $this->getKernel()->boot();
         $this->getKernel()->getContainer()->set('cache', $this);
@@ -68,7 +68,7 @@ class PageCache extends HttpCache
     /**
      * @return Store|StoreInterface
      */
-    protected function createStore()
+    protected function createStore(): StoreInterface
     {
         return $this->store ?? new Store($this->cacheDir ?: $this->kernel->getCacheDir() . '/http_cache');
     }
