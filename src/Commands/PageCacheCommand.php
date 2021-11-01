@@ -35,7 +35,7 @@ class PageCacheCommand extends WP_CLI_Command
     {
         \Roots\bootloader();
 
-        if ([$url] = $args){
+        if ([$url] = $args) {
             app(PageCache::class)->getStore()->purge($url);
         } else {
             app(PageCache::class)->getStore()->cleanup();
