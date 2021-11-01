@@ -41,19 +41,31 @@ based on [Laravel](https://laravel.com/) fondation.
 
 ## Configuration
 
-```bash
-composer require leocolomb/wp-acorn-cache
-```
-
-### Driver
+### Object Cache
+#### Driver
 
 The cache driver must be setup as per [Laravel documentation](https://laravel.com/docs/cache#configuration).
+
+When using [Bedrock](https://roots.io/bedrock/) as WordPress boilerplate, specify the driver
+in your `.env` file.
 
 ```dotenv
 CACHE_DRIVER=redis
 ```
 
-### Handlers
+#### Options
+
+Object cache behavior can be configured with its appropriate config file, [`config/object-cache.php`](config/object-cache.php).
+
+### Page Cache
+#### Activation
+
+The page cache handler is activated as soon as the drop-in `advanced-cache.php` is managed.
+To disable the page cache, do not include it in your `composer.json` (see [Usage](#usage)).
+
+#### Options
+
+Page cache behavior can be configured with its appropriate config file, [`config/page-cache.php`](config/page-cache.php).
 
 ## License
 
