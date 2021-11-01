@@ -4,8 +4,8 @@ namespace LeoColomb\WPAcornCache\Commands;
 
 use WP_CLI;
 use WP_CLI_Command;
+
 use function app;
-use const LeoColomb\WPAcornCache\WP_REDIS_DISABLED;
 
 /**
  * WordPress Acorn Cache commands.
@@ -29,7 +29,7 @@ class AcornCache extends WP_CLI_Command
         $plugin = $GLOBALS['wp_object_cache'];
         $client = $plugin->get_redis_client_name();
 
-        if (defined('WP_REDIS_DISABLED') && WP_REDIS_DISABLED) {
+        if (defined('WP_REDIS_DISABLED') && \WP_REDIS_DISABLED) {
             WP_CLI::line('Status: ' . WP_CLI::colorize('%yDisabled%n'));
             return;
         }
