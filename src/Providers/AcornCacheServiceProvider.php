@@ -2,10 +2,11 @@
 
 namespace LeoColomb\WPAcornCache\Providers;
 
-use LeoColomb\WPAcornCache\Console\ObjectCacheCommand;
-use LeoColomb\WPAcornCache\Console\PageCacheCommand;
-use LeoColomb\WPAcornCache\ObjectCache;
-use LeoColomb\WPAcornCache\PageCache;
+use LeoColomb\WPAcornCache\Console\ObjectCachePurgeCommand;
+use LeoColomb\WPAcornCache\Console\ObjectCacheStatusCommand;
+use LeoColomb\WPAcornCache\Console\PageCachePurgeCommand;
+use LeoColomb\WPAcornCache\Caches\ObjectCache;
+use LeoColomb\WPAcornCache\Caches\PageCache;
 use Roots\Acorn\ServiceProvider;
 
 class AcornCacheServiceProvider extends ServiceProvider
@@ -37,9 +38,12 @@ class AcornCacheServiceProvider extends ServiceProvider
             dirname(__DIR__, 2) . '/config/page-cache.php' => $this->app->configPath('page-cache.php'),
         ]);
 
-        $this->commands([
-            ObjectCacheCommand::class,
-            PageCacheCommand::class,
-        ]);
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                ObjectCacheStatusCommand::class,
+                ObjectCachePurgeCommand::class,
+                PageCachePurgeCommand::class,
+            ]);
+        }
     }
 }

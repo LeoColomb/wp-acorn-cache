@@ -1,10 +1,15 @@
 <?php
 
-namespace LeoColomb\WPAcornCache;
+namespace LeoColomb\WPAcornCache\Caches;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+
+use function collect;
+use function get_current_blog_id;
+use function is_multisite;
+use function wp_suspend_cache_addition;
 
 /**
  * Core class that implements an object cache.

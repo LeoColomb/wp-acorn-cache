@@ -6,11 +6,11 @@
  * @link https://developer.wordpress.org/reference/classes/wp_object_cache/
  */
 
-if (! class_exists('\\LeoColomb\\WPAcornCache\\ObjectCache')) {
+if (! class_exists('\\LeoColomb\\WPAcornCache\\Caches\\ObjectCache')) {
     return;
 }
 
-use LeoColomb\WPAcornCache\ObjectCache;
+use LeoColomb\WPAcornCache\Facades\ObjectCache;
 
 /**
  * Adds data to the cache, if the cache key doesn't already exist.
@@ -26,7 +26,7 @@ use LeoColomb\WPAcornCache\ObjectCache;
  */
 function wp_cache_add($key, $data, string $group = '', int $expire = 0)
 {
-    return app(ObjectCache::class)->add($key, $data, $group, $expire);
+    return ObjectCache::add($key, $data, $group, $expire);
 }
 
 /**
@@ -56,7 +56,7 @@ function wp_cache_close()
  */
 function wp_cache_decr($key, int $offset = 1, string $group = '')
 {
-    return app(ObjectCache::class)->decr($key, $offset, $group);
+    return ObjectCache::decr($key, $offset, $group);
 }
 
 /**
@@ -69,7 +69,7 @@ function wp_cache_decr($key, int $offset = 1, string $group = '')
  */
 function wp_cache_delete($key, string $group = '')
 {
-    return app(ObjectCache::class)->delete($key, $group);
+    return ObjectCache::delete($key, $group);
 }
 
 /**
@@ -80,7 +80,7 @@ function wp_cache_delete($key, string $group = '')
  */
 function wp_cache_flush()
 {
-    return app(ObjectCache::class)->flush();
+    return ObjectCache::flush();
 }
 
 /**
@@ -97,7 +97,7 @@ function wp_cache_flush()
  */
 function wp_cache_get($key, string $group = '', bool $force = false, bool &$found = null)
 {
-    return app(ObjectCache::class)->get($key, $group, $found);
+    return ObjectCache::get($key, $group, $found);
 }
 
 /**
@@ -112,7 +112,7 @@ function wp_cache_get($key, string $group = '', bool $force = false, bool &$foun
  */
 function wp_cache_get_multiple(array $keys, string $group = '', bool $force = false)
 {
-    return app(ObjectCache::class)->getMultiple($keys, $group, $force);
+    return ObjectCache::getMultiple($keys, $group, $force);
 }
 
 /**
@@ -126,7 +126,7 @@ function wp_cache_get_multiple(array $keys, string $group = '', bool $force = fa
  */
 function wp_cache_incr($key, int $offset = 1, string $group = '')
 {
-    return app(ObjectCache::class)->incr($key, $offset, $group);
+    return ObjectCache::incr($key, $offset, $group);
 }
 
 /**
@@ -138,7 +138,7 @@ function wp_cache_incr($key, int $offset = 1, string $group = '')
 function wp_cache_init()
 {
     \Roots\bootloader();
-    $GLOBALS['wp_object_cache'] = app(ObjectCache::class);
+    $GLOBALS['wp_object_cache'] = ObjectCache::getFacadeRoot();
 }
 
 /**
@@ -155,7 +155,7 @@ function wp_cache_init()
  */
 function wp_cache_replace($key, $data, string $group = '', int $expire = 0)
 {
-    return app(ObjectCache::class)->replace($key, $data, $group, $expire);
+    return ObjectCache::replace($key, $data, $group, $expire);
 }
 
 /**
@@ -173,7 +173,7 @@ function wp_cache_replace($key, $data, string $group = '', int $expire = 0)
  */
 function wp_cache_set($key, $data, string $group = '', int $expire = 0)
 {
-    return app(ObjectCache::class)->set($key, $data, $group, $expire);
+    return ObjectCache::set($key, $data, $group, $expire);
 }
 
 /**
@@ -185,7 +185,7 @@ function wp_cache_set($key, $data, string $group = '', int $expire = 0)
  */
 function wp_cache_switch_to_blog(int $blog_id)
 {
-    app(ObjectCache::class)->switchToBlog($blog_id);
+    ObjectCache::switchToBlog($blog_id);
 }
 
 /**
@@ -196,7 +196,7 @@ function wp_cache_switch_to_blog(int $blog_id)
  */
 function wp_cache_add_global_groups($groups)
 {
-    app(ObjectCache::class)->addGlobalGroups($groups);
+    ObjectCache::addGlobalGroups($groups);
 }
 
 /**
@@ -207,7 +207,7 @@ function wp_cache_add_global_groups($groups)
  */
 function wp_cache_add_non_persistent_groups($groups)
 {
-    app(ObjectCache::class)->addNonPersistentGroups($groups);
+    ObjectCache::addNonPersistentGroups($groups);
 }
 
 /**
@@ -223,7 +223,7 @@ function wp_cache_add_non_persistent_groups($groups)
  */
 function wp_cache_remember(string $key, callable $callback, string $group = '', int $expire = 0)
 {
-    return app(ObjectCache::class)->remember($key, $callback, $group, $expire);
+    return ObjectCache::remember($key, $callback, $group, $expire);
 }
 
 /**
@@ -238,5 +238,5 @@ function wp_cache_remember(string $key, callable $callback, string $group = '', 
  */
 function wp_cache_forget(string $key, string $group = '', $default = null)
 {
-    return app(ObjectCache::class)->forget($key, $group, $default);
+    return ObjectCache::forget($key, $group, $default);
 }

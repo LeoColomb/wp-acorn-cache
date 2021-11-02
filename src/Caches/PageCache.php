@@ -1,6 +1,6 @@
 <?php
 
-namespace LeoColomb\WPAcornCache;
+namespace LeoColomb\WPAcornCache\Caches;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

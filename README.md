@@ -12,7 +12,7 @@ based on [Laravel](https://laravel.com/) fondation.
 
 * Enables the two cache wrappers for WordPress using [drop-ins](https://developer.wordpress.org/reference/functions/_get_dropins/).
   * Object Cache ([`object-cache.php`](dropins/object-cache.php))
-  * Advanced Page Cache ([`advanced-cache.php`](dropins/advanced-cache.php))
+  * Advanced Page Cache (optional) ([`advanced-cache.php`](dropins/advanced-cache.php))
 * Compatible with any driver supported by Laravel (including Redis, Memcached and Array).
 * Adds handy [WP-CLI](https://wp-cli.org/) commands.
 * Targets modern software stacks.
@@ -20,12 +20,15 @@ based on [Laravel](https://laravel.com/) fondation.
 
 ## Usage
 
-* Prepare your Composer file by adding custom paths ([more info](https://github.com/Koodimonni/Composer-Dropin-Installer#readme))
+* Prepare your Composer file by adding custom paths.  
+  Replace `<wordpress-root/wp-content/>` with your WordPress content path,
+  `web/app/` with [Bedrock](https://roots.io/bedrock/).  
+  See [more info](https://github.com/Koodimonni/Composer-Dropin-Installer#readme).
   ```json
   {
     "extra": {
       "dropin-paths": {
-        "wordpress-root/wp-content/": [
+        "<wordpress-root/wp-content/>": [
           "package:leocolomb/wp-acorn-cache:dropins/object-cache.php",
           "package:leocolomb/wp-acorn-cache:dropins/advanced-cache.php"
         ]
@@ -34,21 +37,21 @@ based on [Laravel](https://laravel.com/) fondation.
   }
   ```
 
-* Require the package in your Composer-managed WordPress instance
-  ```bash
+* Require the package in your Composer-managed WordPress instance.
+  ```sh
   composer require leocolomb/wp-acorn-cache
   ```
 
-## Configuration
-
-Start by publishing the configuration file using Acorn:
-
-```bash
-wp acorn vendor:publish --provider="LeoColomb\WPAcornCache\Providers\AcornCacheServiceProvider"
-```
-
 ### Object Cache
-#### Driver
+
+The WordPress Object Cache is used to save on trips to the database.
+The Object Cache stores all of the cache data to memory and makes the cache
+contents available by using a key, which is used to name and later retrieve
+the cache contents.
+
+See [WordPress documentation](https://developer.wordpress.org/reference/classes/wp_object_cache/).
+
+#### Driver (recommended)
 
 The cache driver must be setup as per [Laravel documentation](https://laravel.com/docs/cache#configuration).
 
@@ -59,19 +62,36 @@ in your `.env` file.
 CACHE_DRIVER=redis
 ```
 
-#### Options
+#### Configuration (optional)
 
 Object cache behavior can be configured with its appropriate config file, [`config/object-cache.php`](config/object-cache.php).
 
+Start by publishing the configuration file using Acorn.
+```bash
+wp acorn vendor:publish --provider="LeoColomb\WPAcornCache\Providers\AcornCacheServiceProvider"
+```
+
 ### Page Cache
-#### Activation
 
-The page cache handler is activated as soon as the drop-in `advanced-cache.php` is managed.
-To disable the page cache, do not include it in your `composer.json` (see [Usage](#usage)).
+With Page Caching, you cache the full output of a page (i.e. the response) and bypass WordPress
+entirely on subsequent requests.
 
-#### Options
+**Note:** The page cache is using [Symfony HttpCache](https://symfony.com/doc/current/http_cache.html).
+While quite efficient, you should prefer using an appropriate page cache tool, like Varnish, Nginx cache or a CDN.
+
+#### Activation (optional)
+
+Page cache is not activated per default with WordPress.
+To enable page cache, define the constant `WP_CACHE` to `true`.
+
+#### Configuration (optional)
 
 Page cache behavior can be configured with its appropriate config file, [`config/page-cache.php`](config/page-cache.php).
+
+Start by publishing the configuration file using Acorn.
+```bash
+wp acorn vendor:publish --provider="LeoColomb\WPAcornCache\Providers\AcornCacheServiceProvider"
+```
 
 ## License
 
