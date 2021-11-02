@@ -9,3 +9,4 @@ composer.lock diff=json
 /.travis.yml export-ignore
 /phpcs.xml export-ignore
 /*.md export-ignore
+/tests export-ignore

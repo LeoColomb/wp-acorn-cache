@@ -5,6 +5,7 @@ namespace LeoColomb\WPAcornCache\Caches;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Str;
 
 use function collect;
 use function get_current_blog_id;
@@ -86,13 +87,13 @@ class ObjectCache
     /**
      * Adds data to the cache if it doesn't already exist.
      *
-     * @param int|string $key    What to call the contents in the cache.
+     * @param string $key    What to call the contents in the cache.
      * @param mixed      $data   The contents to store in the cache.
      * @param string     $group  Optional. Where to group the cache contents. Default 'default'.
      * @param int        $expire Optional. When to expire the cache contents. Default 0 (no expiration).
      * @return bool True on success, false if cache key and group already exist.
      */
-    public function add(string $key, $data, string $group = 'default', int $expire = 0): bool
+    public function add(string $key, mixed $data, string $group = 'default', int $expire = 0): bool
     {
         if (function_exists('wp_suspend_cache_addition') && wp_suspend_cache_addition()) {
             return false;
@@ -106,13 +107,13 @@ class ObjectCache
      *
      * @since 2.0.0
      *
-     * @param int|string $key    What to call the contents in the cache.
+     * @param string $key    What to call the contents in the cache.
      * @param mixed      $data   The contents to store in the cache.
      * @param string     $group  Optional. Where to group the cache contents. Default 'default'.
      * @param int        $expire Optional. When to expire the cache contents. Default 0 (no expiration).
      * @return bool False if not exists, true if contents were replaced.
      */
-    public function replace(string $key, $data, string $group = 'default', int $expire = 0): bool
+    public function replace(string $key, mixed $data, string $group = 'default', int $expire = 0): bool
     {
         if (! Cache::has($this->buildKey($key, $group))) {
             return false;
@@ -128,7 +129,7 @@ class ObjectCache
      *
      * @since 2.0.0
      *
-     * @param int|string $key        What the contents in the cache are called.
+     * @param string $key        What the contents in the cache are called.
      * @param string     $group      Optional. Where the cache contents are grouped. Default 'default'.
      * @return bool False if the contents weren't deleted and true on success.
      */
@@ -160,15 +161,15 @@ class ObjectCache
      *
      * @since 2.0.0
      *
-     * @param int|string $key   The key under which the cache contents are stored.
+     * @param string $key   The key under which the cache contents are stored.
      * @param string     $group Optional. Where the cache contents are grouped. Default 'default'.
      * @param bool       $force Optional. Unused. Whether to force an update of the local cache
      *                          from the persistent cache. Default false.
      * @param bool       $found Optional. Whether the key was found in the cache (passed by reference).
      *                          Disambiguates a return of false, a storable value. Default null.
-     * @return mixed|false The cache contents on success, false on failure to retrieve contents.
+     * @return mixed The cache contents on success, false on failure to retrieve contents.
      */
-    public function get(string $key, string $group = 'default', bool $force = false, bool &$found = null)
+    public function get(string $key, string $group = 'default', bool $force = false, bool &$found = null): mixed
     {
         $found = true;
 
@@ -213,13 +214,13 @@ class ObjectCache
      *
      * @since 2.0.0
      *
-     * @param int|string $key    What to call the contents in the cache.
+     * @param string $key    What to call the contents in the cache.
      * @param mixed      $data   The contents to store in the cache.
      * @param string     $group  Optional. Where to group the cache contents. Default 'default'.
-     * @param int        $expire Not Used.
+     * @param ?int        $expire Not Used.
      * @return true Always returns true.
      */
-    public function set($key, $data, $group = 'default', $expire = null): bool
+    public function set(string $key, mixed $data, string $group = 'default', int $expire = null): bool
     {
         if (in_array($group, $this->config->get('non-persistent'))) {
             return true;
@@ -233,12 +234,12 @@ class ObjectCache
      *
      * @since 3.3.0
      *
-     * @param int|string $key    The cache key to increment
+     * @param string $key    The cache key to increment
      * @param int        $offset Optional. The amount by which to increment the item's value. Default 1.
      * @param string     $group  Optional. The group the key is in. Default 'default'.
      * @return int|false The item's new value on success, false on failure.
      */
-    public function incr(string $key, int $offset = 1, string $group = 'default')
+    public function incr(string $key, int $offset = 1, string $group = 'default'): int|false
     {
         if (in_array($group, $this->config->get('non-persistent'))) {
             return false;
@@ -254,12 +255,12 @@ class ObjectCache
      *
      * @since 3.3.0
      *
-     * @param int|string $key    The cache key to decrement.
+     * @param string $key    The cache key to decrement.
      * @param int        $offset Optional. The amount by which to decrement the item's value. Default 1.
      * @param string     $group  Optional. The group the key is in. Default 'default'.
      * @return int|false The item's new value on success, false on failure.
      */
-    public function decr(string $key, int $offset = 1, string $group = 'default')
+    public function decr(string $key, int $offset = 1, string $group = 'default'): int|false
     {
         if (in_array($group, $this->config->get('non-persistent'))) {
             return false;
@@ -281,7 +282,7 @@ class ObjectCache
      *                           Default is 0 (as long as possible).
      * @return mixed The value returned from $callback, pulled from the cache when available.
      */
-    public function remember(string $key, callable $callback, string $group = '', int $expire = null)
+    public function remember(string $key, callable $callback, string $group = '', int $expire = null): mixed
     {
         return Cache::remember($this->buildKey($key, $group), $expire, $callback);
     }
@@ -295,7 +296,7 @@ class ObjectCache
      *                        exist in the object cache. Default is null.
      * @return mixed The cached value, when available, or $default.
      */
-    public function forget(string $key, string $group = '', $default = null)
+    public function forget(string $key, string $group = '', mixed $default = null): mixed
     {
         return Cache::pull($this->buildKey($key, $group), $default);
     }
@@ -318,9 +319,9 @@ class ObjectCache
      * @param string $category The category of the list of groups.
      * @param array|string $groups List of groups that are global.
      */
-    protected function addGroups(string $category, $groups): void
+    protected function addGroups(string $category, array|string $groups): void
     {
-        $this->config->mergeRecursive([$category => Arr::wrap($groups)]);
+        $this->config = $this->config->mergeRecursive([$category => Arr::wrap($groups)]);
     }
 
     /**
@@ -328,7 +329,7 @@ class ObjectCache
      *
      * @param array|string $groups List of groups that are global.
      */
-    public function addGlobalGroups($groups): void
+    public function addGlobalGroups(array|string $groups): void
     {
         $this->addGroups('global', $groups);
     }
@@ -338,7 +339,7 @@ class ObjectCache
      *
      * @param array|string $groups  List of groups that are to be non-persistent.
      */
-    public function addNonPersistentGroups($groups): void
+    public function addNonPersistentGroups(array|string $groups): void
     {
         $this->addGroups('non-persistent', $groups);
     }
@@ -359,5 +360,14 @@ class ObjectCache
         $prefix = in_array($group, $this->config->get('global')) ? '' : $this->blogPrefix;
 
         return "{$prefix}{$group}:{$key}";
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function __get(string $name): mixed
+    {
+        return $this->config->get(Str::slug(Str::remove('_groups', $name)));
     }
 }

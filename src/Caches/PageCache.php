@@ -68,7 +68,7 @@ class PageCache extends HttpCache
     /**
      * @return Store|StoreInterface
      */
-    protected function createStore(): StoreInterface
+    protected function createStore(): Store|StoreInterface
     {
         return $this->store ?? new Store($this->cacheDir ?: $this->kernel->getCacheDir() . '/http_cache');
     }
