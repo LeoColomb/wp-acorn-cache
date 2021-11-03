@@ -130,7 +130,7 @@ function wp_cache_incr($key, int $offset = 1, string $group = '')
 }
 
 /**
- * Sets up Object AcornCache Global and assigns it.
+ * Sets up Object Cache global and assigns it.
  *
  * @throws Exception
  * @global ObjectCache $wp_object_cache
