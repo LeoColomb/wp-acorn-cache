@@ -33,6 +33,8 @@ class AcornCacheServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->app->make(ObjectCache::class);
+
         $this->publishes([
             dirname(__DIR__, 2) . '/config/object-cache.php' => $this->app->configPath('object-cache.php'),
             dirname(__DIR__, 2) . '/config/page-cache.php' => $this->app->configPath('page-cache.php'),
