@@ -2145,16 +2145,16 @@
         },
         {
             "name": "pestphp/pest",
-            "version": "v1.21.0",
+            "version": "v1.21.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pestphp/pest.git",
-                "reference": "11eb1903c2ecf83149e7c65b8160bc44a823ac39"
+                "reference": "92b8d32ef78c54c915641999e0c4167d7202b2d9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pestphp/pest/zipball/11eb1903c2ecf83149e7c65b8160bc44a823ac39",
-                "reference": "11eb1903c2ecf83149e7c65b8160bc44a823ac39",
+                "url": "https://api.github.com/repos/pestphp/pest/zipball/92b8d32ef78c54c915641999e0c4167d7202b2d9",
+                "reference": "92b8d32ef78c54c915641999e0c4167d7202b2d9",
                 "shasum": ""
             },
             "require": {
@@ -2222,9 +2222,13 @@
             ],
             "support": {
                 "issues": "https://github.com/pestphp/pest/issues",
-                "source": "https://github.com/pestphp/pest/tree/v1.21.0"
+                "source": "https://github.com/pestphp/pest/tree/v1.21.1"
             },
             "funding": [
+                {
+                    "url": "https://www.paypal.com/paypalme/enunomaduro",
+                    "type": "custom"
+                },
                 {
                     "url": "https://github.com/lukeraymonddowning",
                     "type": "github"
@@ -2250,7 +2254,7 @@
                     "type": "patreon"
                 }
             ],
-            "time": "2021-11-17T10:54:00+00:00"
+            "time": "2021-11-25T16:44:17+00:00"
         },
         {
             "name": "pestphp/pest-plugin",
@@ -2806,16 +2810,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "9.2.8",
+            "version": "9.2.9",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "cf04e88a2e3c56fc1a65488afd493325b4c1bc3e"
+                "reference": "f301eb1453c9e7a1bc912ee8b0ea9db22c60223b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/cf04e88a2e3c56fc1a65488afd493325b4c1bc3e",
-                "reference": "cf04e88a2e3c56fc1a65488afd493325b4c1bc3e",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/f301eb1453c9e7a1bc912ee8b0ea9db22c60223b",
+                "reference": "f301eb1453c9e7a1bc912ee8b0ea9db22c60223b",
                 "shasum": ""
             },
             "require": {
@@ -2871,7 +2875,7 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.8"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/9.2.9"
             },
             "funding": [
                 {
@@ -2879,7 +2883,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-10-30T08:01:38+00:00"
+            "time": "2021-11-19T15:21:02+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -4768,25 +4772,25 @@
         },
         {
             "name": "symfony/console",
-            "version": "v5.4.0-BETA1",
+            "version": "v5.4.0-RC1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "bea7632e3b1d12decedba0a7fe7a7e0ebf7ee2f4"
+                "reference": "f797eedbbede8a2e6cdb8d5f16da0d6fb9bbfd12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/bea7632e3b1d12decedba0a7fe7a7e0ebf7ee2f4",
-                "reference": "bea7632e3b1d12decedba0a7fe7a7e0ebf7ee2f4",
+                "url": "https://api.github.com/repos/symfony/console/zipball/f797eedbbede8a2e6cdb8d5f16da0d6fb9bbfd12",
+                "reference": "f797eedbbede8a2e6cdb8d5f16da0d6fb9bbfd12",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.2.5",
-                "symfony/deprecation-contracts": "^2.1",
+                "symfony/deprecation-contracts": "^2.1|^3",
                 "symfony/polyfill-mbstring": "~1.0",
                 "symfony/polyfill-php73": "^1.8",
                 "symfony/polyfill-php80": "^1.16",
-                "symfony/service-contracts": "^1.1|^2",
+                "symfony/service-contracts": "^1.1|^2|^3",
                 "symfony/string": "^5.1|^6.0"
             },
             "conflict": {
@@ -4847,7 +4851,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https://github.com/symfony/console/tree/v5.4.0-BETA1"
+                "source": "https://github.com/symfony/console/tree/v5.4.0-RC1"
             },
             "funding": [
                 {
@@ -4863,7 +4867,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-11-04T16:48:04+00:00"
+            "time": "2021-11-23T18:53:11+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -6451,7 +6455,7 @@
         },
         {
             "name": "symfony/string",
-            "version": "v5.4.0-BETA1",
+            "version": "v5.4.0-RC1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/string.git",
@@ -6514,7 +6518,7 @@
                 "utf8"
             ],
             "support": {
-                "source": "https://github.com/symfony/string/tree/v5.4.0-BETA1"
+                "source": "https://github.com/symfony/string/tree/v5.4.0-RC1"
             },
             "funding": [
                 {
