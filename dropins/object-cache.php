@@ -137,7 +137,7 @@ function wp_cache_incr($key, int $offset = 1, string $group = '')
  */
 function wp_cache_init()
 {
-    \Roots\bootloader();
+    \Roots\bootloader()->boot();
     $GLOBALS['wp_object_cache'] = ObjectCache::getFacadeRoot();
 }
 

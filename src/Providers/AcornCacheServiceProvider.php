@@ -7,7 +7,7 @@ use LeoColomb\WPAcornCache\Console\ObjectCacheStatusCommand;
 use LeoColomb\WPAcornCache\Console\PageCachePurgeCommand;
 use LeoColomb\WPAcornCache\Caches\ObjectCache;
 use LeoColomb\WPAcornCache\Caches\PageCache;
-use Roots\Acorn\ServiceProvider;
+use Illuminate\Support\ServiceProvider;
 
 class AcornCacheServiceProvider extends ServiceProvider
 {

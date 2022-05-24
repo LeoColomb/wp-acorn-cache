@@ -3,7 +3,7 @@
 namespace LeoColomb\WPAcornCache\Facades;
 
 use LeoColomb\WPAcornCache\Caches\ObjectCache as ObjectCacheAccessor;
-use Roots\Acorn\Facade;
+use Illuminate\Support\Facades\Facade;
 
 class ObjectCache extends Facade
 {
