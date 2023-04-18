@@ -21,7 +21,7 @@
   ],
   "require": {
     "php": "^8.0",
-    "roots/acorn": "^v3.0.0-alpha.1"
+    "roots/acorn": "^v3.0"
   },
   "require-dev": {
     "pestphp/pest": "^v1.20",
@@ -47,7 +47,12 @@
   },
   "config": {
     "sort-packages": true,
-    "preferred-install": "dist"
+    "preferred-install": "dist",
+    "allow-plugins": {
+      "composer/installers": true,
+      "pestphp/pest-plugin": true,
+      "koodimonni/composer-dropin-installer": true
+    }
   },
   "minimum-stability": "beta",
   "scripts": {
