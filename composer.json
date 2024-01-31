@@ -21,7 +21,7 @@
   ],
   "require": {
     "php": "^8.1",
-    "roots/acorn": "^v3.0"
+    "roots/acorn": "^v4.0"
   },
   "require-dev": {
     "pestphp/pest": "^v1.20",
