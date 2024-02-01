@@ -5,7 +5,7 @@
 [![Build Status](https://github.com/LeoColomb/wp-acorn-cache/workflows/PHP%20CI/badge.svg)](https://github.com/LeoColomb/wp-acorn-cache/actions?query=workflow%3APHP%20CI)
 [![Packagist](https://img.shields.io/packagist/v/LeoColomb/wp-acorn-cache.svg)](https://packagist.org/packages/LeoColomb/wp-acorn-cache)
 
-> **Warning**  
+> [!Warning]  
 > 🚧 This project is still rather experimental.  
 > Most probably not functional out of the box and definitely not ready for production.
 
